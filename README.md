@@ -2,7 +2,7 @@
 
 Reproduction for [nativewind/react-native-css#233](https://github.com/nativewind/react-native-css/issues/233).
 
-PR [#224](https://github.com/nativewind/react-native-css/pull/224) fixed the default `className → ["style"]` path, but two `Object.assign({}, left, right)` calls remain in `deepMergeConfig` ([lines 362 and 365](https://github.com/nativewind/react-native-css/blob/008d479/src/native/styles/index.ts#L362-L365)) that still copy `undefined` values, destroying computed styles for other targets.
+PR [#224](https://github.com/nativewind/react-native-css/pull/224) fixed the default `className → ["style"]` path, but two `Object.assign({}, left, right)` calls remain in `deepMergeConfig` ([lines 362 and 365](https://github.com/nativewind/react-native-css/blob/930095f/src/native/styles/index.ts#L362-L365)) that still copy `undefined` values, destroying computed styles for other targets.
 
 ## Affected code paths
 
@@ -14,21 +14,24 @@ PR [#224](https://github.com/nativewind/react-native-css/pull/224) fixed the def
 
 ## Screenshots
 
-### Before (react-native-css 3.0.4, unpatched)
-
-Tests 2 and 3 lose all computed styles when `*Style={undefined}` is passed alongside `*ClassName`.
-
-![Before](before.png)
-
-### After (patched — replace Object.assign with undefined-skipping merge)
-
-All three tests render identically in Expected and Actual columns.
-
-![After](after.png)
+<table>
+<tr>
+<th>Before (3.0.4 unpatched)</th>
+<th>After (patched)</th>
+</tr>
+<tr>
+<td><img src="before.png" width="300" /></td>
+<td><img src="after.png" width="300" /></td>
+</tr>
+<tr>
+<td>Tests 2 and 3 lose all computed styles when <code>*Style={undefined}</code> is passed alongside <code>*ClassName</code>.</td>
+<td>All three tests render identically in Expected and Actual columns.</td>
+</tr>
+</table>
 
 ## Fix
 
-Replace `Object.assign({}, left, right)` at [lines 362](https://github.com/nativewind/react-native-css/blob/008d479/src/native/styles/index.ts#L362) and [365](https://github.com/nativewind/react-native-css/blob/008d479/src/native/styles/index.ts#L365) with a merge that skips `undefined` values:
+Replace `Object.assign({}, left, right)` at [lines 362](https://github.com/nativewind/react-native-css/blob/930095f/src/native/styles/index.ts#L362) and [365](https://github.com/nativewind/react-native-css/blob/930095f/src/native/styles/index.ts#L365) with a merge that skips `undefined` values:
 
 ```js
 // Before (buggy)
