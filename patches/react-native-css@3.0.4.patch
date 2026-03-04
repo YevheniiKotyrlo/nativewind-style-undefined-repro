@@ -1,0 +1,36 @@
+diff --git a/dist/commonjs/native/styles/index.js b/dist/commonjs/native/styles/index.js
+index cc79d864f09ce2fb162f18b68fa561194013dd40..489d92086e0f40e792880b7d761468c9eb4d2e41 100644
+--- a/dist/commonjs/native/styles/index.js
++++ b/dist/commonjs/native/styles/index.js
+@@ -259,10 +259,11 @@ function deepMergeConfig(config, left, right, rightIsInline = false) {
+         }
+       }
+     } else {
+-      result = Object.assign({}, left, right);
++      result = { ...left };
++      if (right) { for (const key in right) { if (right[key] !== undefined) { result[key] = right[key]; } } }
+     }
+   } else {
+-    result = Object.assign({}, left, right);
++    result = { ...left };
+   }
+   if (right && rightIsInline && config.source in right && config.target !== config.source) {
+     delete result[config.source];
+diff --git a/dist/module/native/styles/index.js b/dist/module/native/styles/index.js
+index 6dc6f3f447ab4a4a5f3c99a1f2207bd434b0736d..82ca6e4b144e2721ab567915ab6e3227704b06bc 100644
+--- a/dist/module/native/styles/index.js
++++ b/dist/module/native/styles/index.js
+@@ -255,10 +255,11 @@ function deepMergeConfig(config, left, right, rightIsInline = false) {
+         }
+       }
+     } else {
+-      result = Object.assign({}, left, right);
++      result = { ...left };
++      if (right) { for (const key in right) { if (right[key] !== undefined) { result[key] = right[key]; } } }
+     }
+   } else {
+-    result = Object.assign({}, left, right);
++    result = { ...left };
+   }
+   if (right && rightIsInline && config.source in right && config.target !== config.source) {
+     delete result[config.source];

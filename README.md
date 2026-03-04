@@ -48,13 +48,29 @@ if (right) {
 }
 ```
 
-## Setup
+## Reproduce & verify
+
+### 1. See the bug (without patch)
 
 ```bash
-npm install
+# Remove patchedDependencies from package.json, then:
+bun install --no-cache
 npx expo start --clear
-# Open in Expo Go on Android
+# Open in Expo Go on Android → Tests 2 & 3 are unstyled
 ```
+
+### 2. Verify the fix (with patch)
+
+The included `patches/react-native-css@3.0.4.patch` applies the fix above to both dist files. It is registered in `package.json` under `patchedDependencies`.
+
+```bash
+bun install
+npx expo start --clear
+# Open in Expo Go on Android → All 3 tests render identically
+```
+
+## Environment
 
 - Expo SDK 55, react-native-css 3.0.4, NativeWind 5.0.0-preview.2
 - `lightningcss` pinned to 1.30.1 (breaking changes in 1.30.2+)
+- Bun 1.3.10
